@@ -33,7 +33,7 @@ int hash_function(const char* word)
 bool load_dictionary(const char* dictionary_file, hashmap_t hashtable[]) {
   FILE* fp;
   hashmap_t tmp;
-  int hash;
+  int bucket;
   char line[LENGTH + 1];
 
   initialize_hashtable(hashtable);
@@ -46,15 +46,22 @@ bool load_dictionary(const char* dictionary_file, hashmap_t hashtable[]) {
   // For wordlist.txt, each line only contains
   // one word less than 45 characters.
   while(fgets(line, LENGTH, fp) != NULL) {
+    // Switch the last '\n' character to '\0'
     line[strlen(line) - 1] = '\0';
-    hash = hash_function(line);
+    bucket = hash_function(line);
     tmp = (hashmap_t)malloc(sizeof(node));
-    memcpy(tmp->word, line, strlen(line));
+    // memcpy(tmp->word, line, strlen(line));
+    strncpy(tmp->word, line, strlen(line));
     tmp->word[LENGTH] = '\0';
-    tmp->next = hashtable[hash];
-    hashtable[hash] = tmp;
+    tmp->next = NULL;
+    if (hashtable[bucket] == NULL) {
+      hashtable[bucket] = tmp;
+    }
+    else {
+      tmp->next = hashtable[bucket];
+      hashtable[bucket] = tmp;
+    }
   }
-  free(tmp);
   fclose(fp);
   return true;
 }
@@ -72,31 +79,46 @@ void initialize_hashtable(hashmap_t hashtable[]) {
 
 // Check wheter the given word is in the hashtable.
 bool check_word(const char* word, hashmap_t hashtable[]) {
-  int hash = hash_function(word);
+  int bucket = hash_function(word);
+  char* lower_word = NULL;
   hashmap_t ptr = NULL;
 
-  ptr = hashtable[hash];
+  // 1. Check the original word
+  bucket = hash_function(word);
+  ptr = hashtable[bucket];
   while (ptr != NULL) {
-    if (memcmp(ptr->word, word, strlen(word)) == 0) {
-      // Ensure the word are not missing ending characters
-      if (strlen(word) == strlen(ptr->word)) {
-        return true;
-      }
-      else {
-        // Continue to next word
-      }
+    if (strncmp(ptr->word, word, strlen(word)) == 0) {
+      return true;
     }
     else {
-      // Continue to next word
+      ptr = ptr->next;
     }
-    ptr = ptr->next;
   }
+
+  // 2. Check the lowercase'd word
+  lower_word = (char*)malloc(sizeof(char) * (strlen(word) + 1));
+  strncpy(lower_word, word, strlen(word) + 1);
+  for (int i = 0; i < strlen(lower_word); i++) {
+    lower_word[i] = tolower(lower_word[i]);
+  }
+  bucket = hash_function(lower_word);
+  ptr = hashtable[bucket];
+  while (ptr != NULL) {
+    if (strncmp(ptr->word, word, strlen(word)) == 0) {
+      return true;
+    }
+    else {
+      ptr = ptr->next;
+    }
+  }
+
+  free(lower_word);
+  lower_word = NULL;
+  
   return false;
 }
 
 // Check spelling for all words in the given file.
-// [TODO]:
-//    [ ] 1. check words contains only numbers <- should be correct spelled.
 int check_words(FILE* fp, hashmap_t hashtable[], char * misspelled[]) {
   int num_misspelled = 0;
   char line[MAX_LINE_LENGTH + 1];
@@ -110,11 +132,12 @@ int check_words(FILE* fp, hashmap_t hashtable[], char * misspelled[]) {
     // This enables checker to read the last word if
     // there is no newline in the last of the file.
     while (cur <= strlen(line)) {
-      // separate lines by space or punctuation, etc.
-      if (line[cur] != ' ' && line[cur] != '\n' && line[cur] != '\0'
-        && line[cur] != '.' && line[cur] != ',' && line[cur] != '!'
-        && line[cur] != '?' && line[cur] != '\'' && line[cur] != '"'
-        && line[cur] != '(' && line[cur] != ')') {
+      // Separate lines by space or punctuation, etc.
+      // cur will keep moving backward if current character
+      // is a letter (both upper- and lower-case) or digit.
+      if ((line[cur] >= 'A' && line[cur] <= 'Z')
+        || (line[cur] >= 'a' && line[cur] <= 'z')
+        || (line[cur] >= '0' && line[cur] <= '9')) {
         // move to next character
         cur += 1;
       }
@@ -125,19 +148,22 @@ int check_words(FILE* fp, hashmap_t hashtable[], char * misspelled[]) {
           // Continue to find next word.
         }
         else {
-          memcpy(word, line + pre, cur - pre);
+          // (cur - pre) includes the NULL byte at the end.
+          strncpy(word, line + pre, cur - pre);
           word[cur - pre] = '\0';
+
           // 1. check whether word spelled correctly (in dictionary)
           if (check_word(word, hashtable)) {
             // word is correctly spelled
           }
+
           // 2. check whether word only contains digitals 
           else if (if_only_digits(word)) {
             // word is correctly spelled
           }
           else {
             misspelled[num_misspelled] = (char*)malloc(sizeof(char) * (strlen(word) + 1));
-            strncpy(misspelled[num_misspelled], word, strlen(word));
+            strncpy(misspelled[num_misspelled], word, strlen(word) + 1);
             num_misspelled += 1;
           }
           memset(word, 0, strlen(word) + 1);
@@ -156,19 +182,18 @@ int check_words(FILE* fp, hashmap_t hashtable[], char * misspelled[]) {
 }
 
 
-void free_memory(hashmap_t hashtable[], int num_misspelled, char * misspelled[]) {
+void free_memory(hashmap_t hashtable[], int num_misspelled, char* misspelled[]) {
   hashmap_t tmp, head;
   for (int i = 0; i < HASH_SIZE; i++) {
-    if (hashtable[i] == NULL) {
-      continue;
+    if (hashtable[i] != NULL) {
+      head = hashtable[i];
+      while (head != NULL) {
+        tmp = head;
+        head = head->next;
+        free(tmp);
+      }
+      hashtable[i] = NULL;
     }
-    head = hashtable[i];
-    while (head != NULL) {
-      tmp = head;
-      head = head->next;
-      free(tmp);
-    }
-    hashtable[i] = NULL;
   }
 
   for (int i = 0; i < num_misspelled; i++) {

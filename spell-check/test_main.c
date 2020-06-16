@@ -11,6 +11,7 @@
 int main(int argc, char* argv[]) {
   char* dictionary_file = "wordlist.txt";
   char* filename = "test_words.txt";
+
   int ptr = 0;
   bool ifLoadedSuccess = load_dictionary(dictionary_file, hashtable);
   FILE* fp;

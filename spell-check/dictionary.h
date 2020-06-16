@@ -90,7 +90,7 @@ bool load_dictionary(const char* dictionary_file, hashmap_t hashtable[]);
  *  hashtable:          The hash table to be populated.
  *            
  * Modifies:
- *  hashtable: This hashmap should be filled with NULL value on its next field.
+ *  hashtable: This hashmap should be filled with NULL on each element.
  *
  * Example:
  *  initialize_hashtable(hashtable);
