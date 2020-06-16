@@ -50,19 +50,23 @@ bool load_dictionary(const char* dictionary_file, hashmap_t hashtable[]) {
     hash = hash_function(line);
     tmp = (hashmap_t)malloc(sizeof(node));
     memcpy(tmp->word, line, strlen(line));
+    tmp->word[LENGTH] = '\0';
     tmp->next = hashtable[hash];
     hashtable[hash] = tmp;
   }
+  free(tmp);
+  fclose(fp);
   return true;
 }
 
 void initialize_hashtable(hashmap_t hashtable[]) {
-  hashmap_t tail;
+  // hashmap_t tail;
   for (int i = 0; i < HASH_SIZE; i++) {
-    tail = (hashmap_t)malloc(sizeof(node));
-    memcpy(tail->word, "\x00", 5);
-    tail->next = NULL;
-    hashtable[i] = tail;
+    // tail = (hashmap_t)malloc(sizeof(node));
+    // memcpy(tail->word, "\x00", LENGTH + 1);
+    // tail->next = NULL;
+    // hashtable[i] = tail;
+    hashtable[i] = NULL;
   }
 }
 
@@ -106,7 +110,11 @@ int check_words(FILE* fp, hashmap_t hashtable[], char * misspelled[]) {
     // This enables checker to read the last word if
     // there is no newline in the last of the file.
     while (cur <= strlen(line)) {
-      if (line[cur] != ' ' && line[cur] != '\n' && line[cur] != '\0') {
+      // separate lines by space or punctuation, etc.
+      if (line[cur] != ' ' && line[cur] != '\n' && line[cur] != '\0'
+        && line[cur] != '.' && line[cur] != ',' && line[cur] != '!'
+        && line[cur] != '?' && line[cur] != '\'' && line[cur] != '"'
+        && line[cur] != '(' && line[cur] != ')') {
         // move to next character
         cur += 1;
       }
@@ -119,7 +127,12 @@ int check_words(FILE* fp, hashmap_t hashtable[], char * misspelled[]) {
         else {
           memcpy(word, line + pre, cur - pre);
           word[cur - pre] = '\0';
+          // 1. check whether word spelled correctly (in dictionary)
           if (check_word(word, hashtable)) {
+            // word is correctly spelled
+          }
+          // 2. check whether word only contains digitals 
+          else if (if_only_digits(word)) {
             // word is correctly spelled
           }
           else {
@@ -138,5 +151,51 @@ int check_words(FILE* fp, hashmap_t hashtable[], char * misspelled[]) {
     cur = 0;
     pre = 0;
   }
+
   return num_misspelled;
+}
+
+
+void free_memory(hashmap_t hashtable[], int num_misspelled, char * misspelled[]) {
+  hashmap_t tmp, head;
+  for (int i = 0; i < HASH_SIZE; i++) {
+    if (hashtable[i] == NULL) {
+      continue;
+    }
+    head = hashtable[i];
+    while (head != NULL) {
+      tmp = head;
+      head = head->next;
+      free(tmp);
+    }
+    hashtable[i] = NULL;
+  }
+
+  for (int i = 0; i < num_misspelled; i++) {
+    free(misspelled[i]);
+    misspelled[i] = NULL;
+  }
+}
+
+
+bool if_only_digits(const char* word) {
+  // Count the number of digital characters.
+  // Return true if strlen(word) == number of digits.
+  int length, num_digital;
+  
+  length = strlen(word);
+  num_digital = 0;
+
+  for (int i = 0; i < length; i++) {
+    if (word[i] >= 0x30 && word[i] <= 0x39) {
+      num_digital += 1;
+    }
+  }
+
+  if (length == num_digital) {
+    return true;
+  }
+  else {
+    return false;
+  }
 }

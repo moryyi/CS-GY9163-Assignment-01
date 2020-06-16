@@ -33,6 +33,10 @@ int main(int argc, char* argv[]) {
     printf("misspelled : %s\n", misspelled[ptr]);
   }
 
+  // cleanup
+  fclose(fp);
+  free_memory(hashtable, num_misspelled, misspelled);
+
   return 0;
 }
 #else

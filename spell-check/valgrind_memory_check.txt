@@ -1,0 +1,91 @@
+==60135== Memcheck, a memory error detector
+==60135== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==60135== Using Valgrind-3.16.0 and LibVEX; rerun with -h for copyright info
+==60135== Command: ./spell_check
+==60135== Parent PID: 2800
+==60135== 
+==60135== Conditional jump or move depends on uninitialised value(s)
+==60135==    at 0x4C332A8: strlen (vg_replace_strmem.c:459)
+==60135==    by 0x108D9C: check_word (in /home/qbing/cs9163/CS-GY9163-Assignment-01/spell-check/spell_check)
+==60135==    by 0x108EDF: check_words (in /home/qbing/cs9163/CS-GY9163-Assignment-01/spell-check/spell_check)
+==60135==    by 0x108AC1: main (in /home/qbing/cs9163/CS-GY9163-Assignment-01/spell-check/spell_check)
+==60135==  Uninitialised value was created by a heap allocation
+==60135==    at 0x4C2FECB: malloc (vg_replace_malloc.c:307)
+==60135==    by 0x108C21: load_dictionary (in /home/qbing/cs9163/CS-GY9163-Assignment-01/spell-check/spell_check)
+==60135==    by 0x108A4C: main (in /home/qbing/cs9163/CS-GY9163-Assignment-01/spell-check/spell_check)
+==60135== 
+==60135== Invalid read of size 8
+==60135==    at 0x109069: free_memory (in /home/qbing/cs9163/CS-GY9163-Assignment-01/spell-check/spell_check)
+==60135==    by 0x108B0A: main (in /home/qbing/cs9163/CS-GY9163-Assignment-01/spell-check/spell_check)
+==60135==  Address 0x612d770 is 48 bytes inside a block of size 56 free'd
+==60135==    at 0x4C31078: free (vg_replace_malloc.c:538)
+==60135==    by 0x108CB3: load_dictionary (in /home/qbing/cs9163/CS-GY9163-Assignment-01/spell-check/spell_check)
+==60135==    by 0x108A4C: main (in /home/qbing/cs9163/CS-GY9163-Assignment-01/spell-check/spell_check)
+==60135==  Block was alloc'd at
+==60135==    at 0x4C2FECB: malloc (vg_replace_malloc.c:307)
+==60135==    by 0x108C21: load_dictionary (in /home/qbing/cs9163/CS-GY9163-Assignment-01/spell-check/spell_check)
+==60135==    by 0x108A4C: main (in /home/qbing/cs9163/CS-GY9163-Assignment-01/spell-check/spell_check)
+==60135== 
+==60135== Invalid free() / delete / delete[] / realloc()
+==60135==    at 0x4C31078: free (vg_replace_malloc.c:538)
+==60135==    by 0x10907C: free_memory (in /home/qbing/cs9163/CS-GY9163-Assignment-01/spell-check/spell_check)
+==60135==    by 0x108B0A: main (in /home/qbing/cs9163/CS-GY9163-Assignment-01/spell-check/spell_check)
+==60135==  Address 0x612d740 is 0 bytes inside a block of size 56 free'd
+==60135==    at 0x4C31078: free (vg_replace_malloc.c:538)
+==60135==    by 0x108CB3: load_dictionary (in /home/qbing/cs9163/CS-GY9163-Assignment-01/spell-check/spell_check)
+==60135==    by 0x108A4C: main (in /home/qbing/cs9163/CS-GY9163-Assignment-01/spell-check/spell_check)
+==60135==  Block was alloc'd at
+==60135==    at 0x4C2FECB: malloc (vg_replace_malloc.c:307)
+==60135==    by 0x108C21: load_dictionary (in /home/qbing/cs9163/CS-GY9163-Assignment-01/spell-check/spell_check)
+==60135==    by 0x108A4C: main (in /home/qbing/cs9163/CS-GY9163-Assignment-01/spell-check/spell_check)
+==60135== 
+==60135== 
+==60135== HEAP SUMMARY:
+==60135==     in use at exit: 0 bytes in 0 blocks
+==60135==   total heap usage: 122,829 allocs, 122,830 frees, 6,888,417 bytes allocated
+==60135== 
+==60135== All heap blocks were freed -- no leaks are possible
+==60135== 
+==60135== ERROR SUMMARY: 3 errors from 3 contexts (suppressed: 0 from 0)
+==60135== 
+==60135== 1 errors in context 1 of 3:
+==60135== Invalid free() / delete / delete[] / realloc()
+==60135==    at 0x4C31078: free (vg_replace_malloc.c:538)
+==60135==    by 0x10907C: free_memory (in /home/qbing/cs9163/CS-GY9163-Assignment-01/spell-check/spell_check)
+==60135==    by 0x108B0A: main (in /home/qbing/cs9163/CS-GY9163-Assignment-01/spell-check/spell_check)
+==60135==  Address 0x612d740 is 0 bytes inside a block of size 56 free'd
+==60135==    at 0x4C31078: free (vg_replace_malloc.c:538)
+==60135==    by 0x108CB3: load_dictionary (in /home/qbing/cs9163/CS-GY9163-Assignment-01/spell-check/spell_check)
+==60135==    by 0x108A4C: main (in /home/qbing/cs9163/CS-GY9163-Assignment-01/spell-check/spell_check)
+==60135==  Block was alloc'd at
+==60135==    at 0x4C2FECB: malloc (vg_replace_malloc.c:307)
+==60135==    by 0x108C21: load_dictionary (in /home/qbing/cs9163/CS-GY9163-Assignment-01/spell-check/spell_check)
+==60135==    by 0x108A4C: main (in /home/qbing/cs9163/CS-GY9163-Assignment-01/spell-check/spell_check)
+==60135== 
+==60135== 
+==60135== 1 errors in context 2 of 3:
+==60135== Invalid read of size 8
+==60135==    at 0x109069: free_memory (in /home/qbing/cs9163/CS-GY9163-Assignment-01/spell-check/spell_check)
+==60135==    by 0x108B0A: main (in /home/qbing/cs9163/CS-GY9163-Assignment-01/spell-check/spell_check)
+==60135==  Address 0x612d770 is 48 bytes inside a block of size 56 free'd
+==60135==    at 0x4C31078: free (vg_replace_malloc.c:538)
+==60135==    by 0x108CB3: load_dictionary (in /home/qbing/cs9163/CS-GY9163-Assignment-01/spell-check/spell_check)
+==60135==    by 0x108A4C: main (in /home/qbing/cs9163/CS-GY9163-Assignment-01/spell-check/spell_check)
+==60135==  Block was alloc'd at
+==60135==    at 0x4C2FECB: malloc (vg_replace_malloc.c:307)
+==60135==    by 0x108C21: load_dictionary (in /home/qbing/cs9163/CS-GY9163-Assignment-01/spell-check/spell_check)
+==60135==    by 0x108A4C: main (in /home/qbing/cs9163/CS-GY9163-Assignment-01/spell-check/spell_check)
+==60135== 
+==60135== 
+==60135== 1 errors in context 3 of 3:
+==60135== Conditional jump or move depends on uninitialised value(s)
+==60135==    at 0x4C332A8: strlen (vg_replace_strmem.c:459)
+==60135==    by 0x108D9C: check_word (in /home/qbing/cs9163/CS-GY9163-Assignment-01/spell-check/spell_check)
+==60135==    by 0x108EDF: check_words (in /home/qbing/cs9163/CS-GY9163-Assignment-01/spell-check/spell_check)
+==60135==    by 0x108AC1: main (in /home/qbing/cs9163/CS-GY9163-Assignment-01/spell-check/spell_check)
+==60135==  Uninitialised value was created by a heap allocation
+==60135==    at 0x4C2FECB: malloc (vg_replace_malloc.c:307)
+==60135==    by 0x108C21: load_dictionary (in /home/qbing/cs9163/CS-GY9163-Assignment-01/spell-check/spell_check)
+==60135==    by 0x108A4C: main (in /home/qbing/cs9163/CS-GY9163-Assignment-01/spell-check/spell_check)
+==60135== 
+==60135== ERROR SUMMARY: 3 errors from 3 contexts (suppressed: 0 from 0)

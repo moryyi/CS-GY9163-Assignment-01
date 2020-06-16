@@ -98,6 +98,38 @@ bool load_dictionary(const char* dictionary_file, hashmap_t hashtable[]);
 void initialize_hashtable(hashmap_t hashtable[]);
 
 /**
+ * Returns true if word contains only digits else false.
+ */
+/**
+ * Inputs:
+ *  word:       A word to check the spelling of.
+ *            
+ * Returns:
+ *  bool:       A boolean value indicating if the word contains only digits.
+ *
+ * Modifies:
+ *  
+ * Example:
+ *  bool correct  = if_only_digits(word);
+ **/
+bool if_only_digits(const char* word);
+
+/**
+ * Free allocated heap memory for hashtable and misspelled words.
+ **/
+/**
+ * Inputs:
+ *  hashtable:          The hash table to be freed.
+ *  misspelled:         The misspelled 2d array to be freed.
+ * 
+ * Modifies:
+ * 
+ * Example:
+ *  free_memory(hashtable, misspelled);
+ **/
+void free_memory(hashmap_t hashtable[], int num_misspelled, char * misspelled[]);
+
+/**
  * Already implemented in dictionary.c
  **/
 int hash_function(const char* word);
