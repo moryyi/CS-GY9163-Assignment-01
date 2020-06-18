@@ -1,5 +1,8 @@
 default: spell_check
 
+get-deps:
+	sudo apt-get install -y build-essential check
+
 spell.o: ./spell-check/spell.c
 	gcc -Wall -c ./spell-check/spell.c ./spell-check/dictionary.h
 
