@@ -9,7 +9,8 @@
 
 #ifdef DEBUG
 int main(int argc, char* argv[]) {
-  char* dictionary_file = "wordlist.txt";
+  // char* dictionary_file = "wordlist.txt";
+  char* dictionary_file = "./tests/test_dictionary.txt";
   char* filename = "test_words.txt";
 
   int ptr = 0;
@@ -34,6 +35,11 @@ int main(int argc, char* argv[]) {
     printf("misspelled : %s\n", misspelled[ptr]);
   }
 
+  int value = hash_function("first");
+  printf("hash_function(\"first\") = %d\n", value);
+  printf("hashtable[%d]->word = %s\n", value, hashtable[value]->word);
+  int if_same = strcmp("first", hashtable[value]->word);
+  printf("strcmp() = %d\n", if_same);
   // cleanup
   fclose(fp);
   free_memory(hashtable, num_misspelled, misspelled);
