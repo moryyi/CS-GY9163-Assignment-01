@@ -1,4 +1,6 @@
 language: c
 compiler: gcc
 
+install: apt-get -y build-essential check
+
 script: make && make test
