@@ -3,6 +3,6 @@ compiler: gcc
 
 before_install: sudo apt-get update
 
-install: sudo apt-get -y install build-essential check
+install: sudo apt-get install -y build-essential check
 
 script: make && make test
