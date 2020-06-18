@@ -1,8 +1,5 @@
 language: c
 compiler: gcc
 
-before_script:
-  - cd spell-check
-
 script:
   - make
