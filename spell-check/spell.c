@@ -46,8 +46,11 @@ bool load_dictionary(const char* dictionary_file, hashmap_t hashtable[]) {
   // For wordlist.txt, each line only contains
   // one word less than 45 characters.
   while(fgets(line, LENGTH, fp) != NULL) {
-    // Switch the last '\n' character to '\0'
-    line[strlen(line) - 1] = '\0';
+    // Switch the last '\n' character to '\0' if there is
+    // a newline in the end of the file.
+    if (line[strlen(line) - 1] == '\n')  {
+      line[strlen(line) - 1] = '\0';
+    }
     bucket = hash_function(line);
     tmp = (hashmap_t)malloc(sizeof(node));
     // memcpy(tmp->word, line, strlen(line));
@@ -118,6 +121,11 @@ bool check_word(const char* word, hashmap_t hashtable[]) {
   free(lower_word);
   lower_word = NULL;
   
+  // 3. Check whether contains only digits
+  if (if_only_digits(word)) {
+    return true;
+  }
+
   return false;
 }
 
@@ -137,10 +145,11 @@ int check_words(FILE* fp, hashmap_t hashtable[], char * misspelled[]) {
     while (cur <= strlen(line)) {
       // Separate lines by space or punctuation, etc.
       // cur will keep moving backward if current character
-      // is a letter (both upper- and lower-case) or digit.
+      // is a letter (both upper- and lower-case), digit, or '\''.
       if ((line[cur] >= 'A' && line[cur] <= 'Z')
         || (line[cur] >= 'a' && line[cur] <= 'z')
-        || (line[cur] >= '0' && line[cur] <= '9')) {
+        || (line[cur] >= '0' && line[cur] <= '9')
+        || line[cur] == '\'') {
         // move to next character
         cur += 1;
       }
@@ -155,13 +164,9 @@ int check_words(FILE* fp, hashmap_t hashtable[], char * misspelled[]) {
           strncpy(word, line + pre, cur - pre);
           word[cur - pre] = '\0';
 
-          // 1. check whether word spelled correctly (in dictionary)
+          // Check whether word is spelled correctly (in dictionary)
+          // or whether word contains only digits
           if (check_word(word, hashtable)) {
-            // word is correctly spelled
-          }
-
-          // 2. check whether word only contains digitals 
-          else if (if_only_digits(word)) {
             // word is correctly spelled
           }
           else {
