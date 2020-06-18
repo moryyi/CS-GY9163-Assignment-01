@@ -53,3 +53,4 @@ dkms.conf
 
 # Executable file
 spell_check
+test_spell
