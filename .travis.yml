@@ -1,6 +1,8 @@
 language: c
 compiler: gcc
 
-install: apt-get -y build-essential check
+before_install: sudo apt-get update
+
+install: sudo apt-get -y install build-essential check
 
 script: make && make test
