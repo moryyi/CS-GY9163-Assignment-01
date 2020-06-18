@@ -91,14 +91,6 @@ START_TEST (test_check_word_normal) {
 } END_TEST
 
 
-/**
- * Test Case 0.
- * Normal text file: contains only english words (with misspelled words).
- */
-START_TEST (test_only_english_words) {
-
-} END_TEST
-
 
 /**
  * Test Suite

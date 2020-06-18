@@ -1,2 +1,2 @@
 make clean
-make && make test
+make test
