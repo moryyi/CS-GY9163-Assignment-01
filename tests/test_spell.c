@@ -5,7 +5,10 @@
 
 #define TEST_DICTIONARY_FILENAME "./test_dictionary.txt"
 #define COMPLETE_DICTIONARY_FILENAME "./wordlist.txt"
-#define MAX_MISSPELLED 2000
+
+#ifndef MAX_MISSPELLED
+#define MAX_MISSPELLED 1000
+#endif
 
 /** 
  * Test Case 01.
