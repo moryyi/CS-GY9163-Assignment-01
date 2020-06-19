@@ -10,7 +10,7 @@
 #ifdef DEBUG
 int main(int argc, char* argv[]) {
   // char* dictionary_file = "wordlist.txt";
-  char* dictionary_file = "./tests/test_dictionary.txt";
+  char* dictionary_file = "test_dictionary.txt";
   char* filename = "test_words.txt";
 
   int ptr = 0;

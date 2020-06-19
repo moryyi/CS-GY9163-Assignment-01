@@ -8,26 +8,6 @@
 #define MAX_LINE_LENGTH 2000
 
 
-// // Hash table is an array of linked lists.
-// node* hashtable[HASH_SIZE];
-
-// Maps a word to an integer value to place it in the hash table.
-// Sum the value of each character in the word, then find the 
-// remainder after dividing by the size of the hash table.
-int hash_function(const char* word)
-{
-    int sum = 0;
-    int word_length = strlen(word);
-
-    for (int i = 0; i < word_length; i++)
-    {
-        sum += word[i];
-    }
-    
-    int bucket = sum % HASH_SIZE;
-    return bucket;
-}
-
 // Load words in the dictionary file into the hashtable.
 // Assume the hashtable has been initialized properly.
 bool load_dictionary(const char* dictionary_file, hashmap_t hashtable[]) {
