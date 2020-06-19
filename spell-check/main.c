@@ -38,6 +38,9 @@ int main(int argc, char* argv[]) {
   int value = hash_function("first");
   printf("hash_function(\"first\") = %d\n", value);
   printf("hashtable[%d]->word = %s\n", value, hashtable[value]->word);
+  for (int i = 0; i < 6; i++) {
+    printf("\"first\"[%d] = %d\n", i, hashtable[value]->word[i]);
+  }
   int if_same = strcmp("first", hashtable[value]->word);
   printf("strcmp() = %d\n", if_same);
   // cleanup
