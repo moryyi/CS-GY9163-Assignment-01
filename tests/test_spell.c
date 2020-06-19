@@ -5,13 +5,14 @@
 
 #define TEST_DICTIONARY_FILENAME "./test_dictionary.txt"
 #define COMPLETE_DICTIONARY_FILENAME "./wordlist.txt"
+#define TEST_TEXT_FILENAME "./test_text01.txt"
 
 #ifndef MAX_MISSPELLED
 #define MAX_MISSPELLED 1000
 #endif
 
 /** 
- * Test Case 01.
+ * Test Case 01 for load_dictionary().
  * Check whether load_dictionary() successfully loads given dictionary.
  */
 START_TEST(test_load_normal_dictionary) {
@@ -21,10 +22,10 @@ START_TEST(test_load_normal_dictionary) {
 
   if_loaded = load_dictionary(TEST_DICTIONARY_FILENAME, hashtable);
   
-  // 1. Check return value of load_dictionary()
+  // Check return value of load_dictionary()
   ck_assert_int_eq(true, if_loaded);
 
-  // 2. Check values in hashtable
+  // Check values in hashtable
   /**
    * hash_function("first")   = 552
    * hash_function("second")  = 636
@@ -36,7 +37,7 @@ START_TEST(test_load_normal_dictionary) {
   ck_assert_str_eq("third",   hashtable[539]->word);
   ck_assert_str_eq("fourth",  hashtable[664]->word);
   
-  // 3. Free allocated memory to avoid memory leak.
+  // Free allocated memory to avoid memory leak.
   for (int i = 0; i < HASH_SIZE; i++) {
     head = hashtable[i];
     while (head != NULL) {
@@ -49,7 +50,7 @@ START_TEST(test_load_normal_dictionary) {
 } END_TEST
 
 /**
- * Test Case 02.
+ * Test Case 02 for check_word().
  * Test given words are correctly checked by check_word()
  * 
  */
@@ -90,6 +91,51 @@ START_TEST (test_check_word_normal) {
   }
 } END_TEST
 
+/**
+ * Test Case 03 for check_words()
+ * Test given text file is correctly checked by check_words()
+ */
+/**
+ * test_text01.txt contains:
+ *  1. valid lowercase word
+ *  2. valid lowercase word with first character in uppercase
+ * 
+ *  3. invalid multiple spaces between 2 words
+ *  4. invalid multiple punctuations between 2 words
+ *  5. invalid english word containing digits
+ */
+START_TEST(test_check_words_normal) {
+  hashmap_t hashtable[HASH_SIZE];
+  FILE* fp;
+  int num_misspelled;
+  char* misspelled[MAX_MISSPELLED];
+  char* expected[4];
+
+  expected[0] = "sogn";
+  expected[1] = "skyn";
+  expected[2] = "b3gin";
+  expected[3] = "betta";
+
+  load_dictionary(COMPLETE_DICTIONARY_FILENAME, hashtable);
+
+  // Read given text file.
+  fp = fopen(TEST_TEXT_FILENAME, "r");
+  if (fp == NULL) {
+    ck_assert((fp != NULL));
+  }
+
+  // Get all misspelled words in given text file.
+  num_misspelled = check_words(fp, hashtable, misspelled);
+
+  // Checke return values.
+  ck_assert_int_eq(num_misspelled, 4);
+  for (int i = 0; i < num_misspelled; i++) {
+    ck_assert_str_eq(misspelled[i], expected[i]);
+  }
+
+  // Free allocated memory to avoid memory leak.
+  free_memory(hashtable, num_misspelled, misspelled);
+} END_TEST
 
 
 /**
@@ -105,6 +151,7 @@ Suite* test_spell_suite(void) {
   // Add test case here
   tcase_add_test(tc_core, test_load_normal_dictionary);
   tcase_add_test(tc_core, test_check_word_normal);
+  tcase_add_test(tc_core, test_check_words_normal);
 
   suite_add_tcase(s, tc_core);
 
