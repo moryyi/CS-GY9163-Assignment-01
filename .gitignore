@@ -51,6 +51,12 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
+# gdb history file
+.gdb_history
+
+# gdb_peda file
+peda-session*
+
 # VSCode files
 .vscode/
 
