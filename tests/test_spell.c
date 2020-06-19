@@ -31,7 +31,7 @@ START_TEST(test_load_normal_dictionary) {
    * hash_function("third")   = 539
    * hash_function("fourth")  = 664
    */
-  // ck_assert_str_eq("first",   hashtable[552]->word);
+  ck_assert_str_eq("first",   hashtable[552]->word);
   ck_assert_str_eq("second",  hashtable[636]->word);
   ck_assert_str_eq("third",   hashtable[539]->word);
   ck_assert_str_eq("fourth",  hashtable[664]->word);
