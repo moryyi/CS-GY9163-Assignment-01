@@ -1,19 +1,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "dictionary.h"
-
-// @macro DEBUG : used for main function
-#define DEBUG
+#include "../spell-check/dictionary.h"
 
 
-#ifdef DEBUG
 int main(int argc, char* argv[]) {
-  char* dictionary_file = "wordlist.txt";
-  // char* dictionary_file = "test_dictionary.txt";
-  char* filename = "test_text01.txt";
+  if (argc != 3) {
+    printf("[Error] Invalid arguments.\n");
+    printf("Usage: afl_test_spell <text_file>");
+    return -1;
+  }
+  char* text_file = argv[1];
+  char* dictionary_file = argv[2];
 
-  int ptr = 0;
   bool ifLoadedSuccess = load_dictionary(dictionary_file, hashtable);
   FILE* fp;
   
@@ -22,7 +21,7 @@ int main(int argc, char* argv[]) {
     return -1;
   }
 
-  fp = fopen(filename, "r");
+  fp = fopen(text_file, "r");
   if (fp == NULL) {
     return -1;
   }
@@ -31,6 +30,7 @@ int main(int argc, char* argv[]) {
   int num_misspelled = check_words(fp, hashtable, misspelled);
   
   printf("num_misspelled = %d\n", num_misspelled);
+  int ptr = 0;
   for (ptr = 0; ptr < num_misspelled; ptr++) {
     printf("misspelled : %s\n", misspelled[ptr]);
   }
@@ -41,8 +41,3 @@ int main(int argc, char* argv[]) {
 
   return 0;
 }
-#else
-int main(int argc, char* argv[]) {
-  return 0;
-}
-#endif
