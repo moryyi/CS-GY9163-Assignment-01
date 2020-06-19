@@ -87,7 +87,7 @@ bool check_word(const char* word, hashmap_t hashtable[]) {
   bucket = hash_function(lower_word);
   ptr = hashtable[bucket];
   while (ptr != NULL) {
-    if (strncmp(ptr->word, word, strlen(word)) == 0) {
+    if (strncmp(ptr->word, lower_word, strlen(lower_word)) == 0) {
       // manually free the allocated lower_word
       free(lower_word);
       lower_word = NULL;
