@@ -7,7 +7,7 @@
 int main(int argc, char* argv[]) {
   if (argc != 3) {
     printf("[Error] Invalid arguments.\n");
-    printf("Usage: afl_test_spell <text_file>");
+    printf("Usage: test_spell <text_file> <dictionary_file>\n");
     return -1;
   }
   char* text_file = argv[1];
